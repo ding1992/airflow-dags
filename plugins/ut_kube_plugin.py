@@ -99,7 +99,7 @@ class SparkK8sSubmitOperator(KubernetesPodOperator):
         )
 
         env_vars = {
-            'SPARK_KUBERNETES_NAMESPACE': _get_this_kubernetes_namespace()
+            'SPARK_KUBERNETES_NAMESPACE': 'malacca'
         }
         volume_mount = VolumeMount('spark-logs',
                                    mount_path='/logs/spark-events',
@@ -107,7 +107,7 @@ class SparkK8sSubmitOperator(KubernetesPodOperator):
                                    read_only=False)
         volume_config = {
             'persistentVolumeClaim': {
-                'claimName': 'airflow-{}-sparkworker-spark-logs-pvc'.format(_get_this_kubernetes_namespace())
+                'claimName': 'airflow-malacca-sparkworker-spark-logs-pvc')
             }
         }
         volume = Volume(name='spark-logs', configs=volume_config)
@@ -120,7 +120,7 @@ class SparkK8sSubmitOperator(KubernetesPodOperator):
         }
 
         super(SparkK8sSubmitOperator, self).__init__(
-            namespace=_get_this_kubernetes_namespace(),
+            namespace='malacca',
             name=name,
             cmds=["/bin/bash", "-ec"],
             arguments=["/run_base.sh true && {}".format(_spark_submit_template)],
@@ -130,7 +130,7 @@ class SparkK8sSubmitOperator(KubernetesPodOperator):
             image='551371041312.dkr.ecr.ap-southeast-1.amazonaws.com/spark:2.4.0v3',
             image_pull_policy='Always',
             in_cluster=True,
-            service_account_name='airflow-{}-kubernetesoperator'.format(_get_this_kubernetes_namespace()),
+            service_account_name='spark',
             env_vars=env_vars,
             volumes=[volume],
             volume_mounts=[volume_mount],
