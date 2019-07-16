@@ -80,9 +80,10 @@ t_get_ts = PythonOperator(
 t_log_parser = SparkK8sSubmitOperator(
     task_id='t_log_parser',
     class_path='com.grab.spark.handlers.LogHandler',
-    app_path_s3="s3://malacca-dev/spark-jobs/log-parser/log-parser-1.0-SNAPSHOT-uber.jar",
+    app_path_s3="s3a://ivan-test-data/log-parser-1.0-SNAPSHOT-uber.jar",
     config={
-        'spark.executor.instances': 3
+        'spark.executor.instances': 2,
+        'spark.executor.memory': '3g'
     },
     extra_params="{{ var.value.malacca_log_parser_config_path }} jumpcloud {{ var.value.malacca_log_parser_jumpcloud_input_prefix }}{{ var.value.jumpcloud_input_parsed_suffix }} {{ var.value.malacca_log_parser_jumpcloud_output_prefix }}{{ var.value.jumpcloud_output_parsed_suffix }}",
     dag=dag
