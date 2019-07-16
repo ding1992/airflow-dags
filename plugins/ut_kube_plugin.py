@@ -107,7 +107,7 @@ class SparkK8sSubmitOperator(KubernetesPodOperator):
                                    read_only=False)
         volume_config = {
             'persistentVolumeClaim': {
-                'claimName': 'airflow-malacca-sparkworker-spark-logs-pvc')
+                'claimName': 'airflow-malacca-sparkworker-spark-logs-pvc'
             }
         }
         volume = Volume(name='spark-logs', configs=volume_config)
